@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:volkshandwerker/Services/NetworkManager.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -9,6 +10,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String selectedOption = "Seçenek 1";
+  List<Category> _categories = [];
+  @override
+  void initState() {
+    super.initState();
+    _fetchCategories();
+  }
+
+  Future<void> _fetchCategories() async {
+    NetworkManager networkManager =
+        NetworkManager('https://api.volkshandwerker.de/api');
+    List<Category> categories = await networkManager.fetchCategories();
+
+    setState(() {
+      _categories = categories;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,20 +91,13 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: DropdownButtonFormField<String>(
-                        value: selectedOption,
+                        value: null,
                         items: [
-                          DropdownMenuItem(
-                            value: 'Seçenek 1',
-                            child: Text('Seçenek 1'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'Seçenek 2',
-                            child: Text('Seçenek 2'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'Seçenek 3',
-                            child: Text('Seçenek 3'),
-                          ),
+                          for (var category in _categories)
+                            DropdownMenuItem(
+                              value: category.name,
+                              child: Text(category.name),
+                            ),
                         ],
                         onChanged: (value) {
                           setState(() {
