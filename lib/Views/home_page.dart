@@ -186,11 +186,12 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SearchPage(
-                                      search: _textController.text,
-                                      category: selectedOption,
-                                      categoryId: categoryId,
-                                    )),
+                              builder: (context) => SearchPage(
+                                search: _textController.text,
+                                category: selectedOption,
+                                categoryId: categoryId,
+                              ),
+                            ),
                           );
                         },
                         child: Text(

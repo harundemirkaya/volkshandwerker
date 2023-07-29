@@ -1,6 +1,9 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:volkshandwerker/Models/Branches.dart';
+import 'package:volkshandwerker/Views/company_detail_page.dart';
 
 import '../Services/NetworkManager.dart';
 
@@ -130,10 +133,22 @@ class _SearchPageState extends State<SearchPage> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {},
-              child: const Text('PROFIL AUFRUFEN'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CompanyDetailPage(
+                        url: 'https://volkshandwerker.de/branch/' +
+                            branch.id.toString()),
+                  ),
+                );
+              },
+              child: const Text(
+                'PROFIL AUFRUFEN',
+                style: TextStyle(color: Colors.white),
+              ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.orange,
+                primary: Color.fromRGBO(255, 165, 0, 1),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 shape: RoundedRectangleBorder(
