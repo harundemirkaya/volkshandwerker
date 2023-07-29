@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:volkshandwerker/Views/home_page.dart';
+import 'package:volkshandwerker/Views/search_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,6 +18,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: HomePage(),
+      /* routes: {
+        '/search': (context) => SearchPage(
+              arguments: null,
+            ),
+      }, */
     );
   }
 }

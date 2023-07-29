@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:volkshandwerker/Models/Branches.dart';
 import 'package:volkshandwerker/Models/Categories.dart';
 import 'package:volkshandwerker/Models/LoginResponse.dart';
 import 'package:volkshandwerker/Models/RegisterResponse.dart';
@@ -22,6 +23,24 @@ class NetworkManager {
     }
   }
 
+  Future<List<BranchModel>> fetchBranches(String name, int categoryId) async {
+    // encode
+    final name0 = Uri.encodeComponent(name);
+
+    final response = await http.get(Uri.parse(
+        '$baseUrl/branches?location=$name0&company.categories_in=$categoryId'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonData = json.decode(response.body);
+      List<BranchModel> branches =
+          jsonData.map((json) => BranchModel.fromJson(json)).toList();
+      print(branches);
+      return branches;
+    } else {
+      return [];
+    }
+}
+ 
   Future<LoginResponse?> loginRequest(String email, String password) async {
     var body = {'identifier': email, 'password': password};
     final response = await http.post(
