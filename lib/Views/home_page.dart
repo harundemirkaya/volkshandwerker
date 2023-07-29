@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:volkshandwerker/Services/NetworkManager.dart';
 import 'package:volkshandwerker/Views/login_page.dart';
 import 'package:volkshandwerker/Views/register_page.dart';
+import 'package:volkshandwerker/Models/Categories.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String selectedOption = "Seçenek 1";
-  List<Category> _categories = [];
+  List<Categories> _categories = [];
   @override
   void initState() {
     super.initState();
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _fetchCategories() async {
     NetworkManager networkManager =
         NetworkManager('https://api.volkshandwerker.de/api');
-    List<Category> categories = await networkManager.fetchCategories();
+    List<Categories> categories = await networkManager.fetchCategories();
 
     setState(() {
       _categories = categories;
