@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:volkshandwerker/Services/NetworkManager.dart';
+import 'package:volkshandwerker/Views/login_page.dart';
+import 'package:volkshandwerker/Views/register_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -36,6 +38,33 @@ class _HomePageState extends State<HomePage> {
           "lib/assets/logo.png",
           height: 40,
         ),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'Handwerksbetrieb inserieren') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RegisterPage()),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return ['Handwerksbetrieb inserieren', 'Anmelden']
+                  .map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+            icon: Icon(Icons.more_vert),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
