@@ -5,6 +5,7 @@ import 'package:volkshandwerker/Services/NetworkManager.dart';
 import 'package:volkshandwerker/Views/login_page.dart';
 import 'package:volkshandwerker/Views/register_page.dart';
 import 'package:volkshandwerker/Models/Categories.dart';
+import 'package:volkshandwerker/Views/search_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -25,10 +26,24 @@ class _HomePageState extends State<HomePage> {
         NetworkManager('https://api.volkshandwerker.de/api');
     List<Categories> categories = await networkManager.fetchCategories();
 
+    // Add All Categories
+    categories.insert(
+        0,
+        Categories(
+            id: 0,
+            name: "Alle Kategorien",
+            companies: [],
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+            description: ""));
+
     setState(() {
       _categories = categories;
     });
   }
+
+  // Text Controller
+  final _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +117,7 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: TextField(
+                        controller: _textController,
                         decoration: InputDecoration(
                           hintText: 'Ort',
                           focusedBorder: OutlineInputBorder(
@@ -159,7 +175,23 @@ class _HomePageState extends State<HomePage> {
                       ),
                       child: TextButton(
                         onPressed: () {
-                          //
+                          // Get category id from selectedOption variable
+                          int categoryId = 0;
+                          for (var category in _categories) {
+                            if (category.name == selectedOption) {
+                              categoryId = category.id;
+                            }
+                          }
+                          // Navigate to search page with search parameters
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SearchPage(
+                                      search: _textController.text,
+                                      category: selectedOption,
+                                      categoryId: categoryId,
+                                    )),
+                          );
                         },
                         child: Text(
                           'SUCHEN',
