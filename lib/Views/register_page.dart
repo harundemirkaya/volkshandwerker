@@ -1,10 +1,36 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:volkshandwerker/Models/LoginResponse.dart';
+import 'package:volkshandwerker/Services/NetworkManager.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
+  RegisterPage({Key? key}) : super(key: key);
+
+  @override
+  _RegisterPageState createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
   final ValueNotifier<bool> _checkBoxNotifier = ValueNotifier(false);
   final ValueNotifier<bool> _checkBoxNotifierTwo = ValueNotifier(false);
+
+  LoginResponse? _loginResponse;
+
+  Future<bool> _loginRequest(String email, String password) async {
+    NetworkManager networkManager =
+        NetworkManager('https://api.volkshandwerker.de/api');
+    LoginResponse? loginResponse =
+        await networkManager.loginRequest(email, password);
+    if (loginResponse == null) {
+      return false;
+    } else {
+      setState(() {
+        _loginResponse = loginResponse;
+      });
+      return true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
