@@ -57,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextField(
                 controller: _passwordController,
+                obscureText: true,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.lock),
                   labelText: 'Passwort',
