@@ -1,10 +1,40 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:volkshandwerker/Models/RegisterResponse.dart';
+import 'package:volkshandwerker/Services/NetworkManager.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
+  RegisterPage({Key? key}) : super(key: key);
+
+  @override
+  _RegisterPageState createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
   final ValueNotifier<bool> _checkBoxNotifier = ValueNotifier(false);
   final ValueNotifier<bool> _checkBoxNotifierTwo = ValueNotifier(false);
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  RegisterResponse? _registerResponse;
+
+  Future<bool> _registerRequest(
+      String username, String email, String password) async {
+    NetworkManager networkManager =
+        NetworkManager('https://api.volkshandwerker.de/api');
+    RegisterResponse? registerResponse =
+        await networkManager.registerRequest(username, email, password);
+    if (registerResponse == null) {
+      return false;
+    } else {
+      setState(() {
+        _registerResponse = registerResponse;
+      });
+      return true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +49,7 @@ class RegisterPage extends StatelessWidget {
           child: Column(
             children: <Widget>[
               TextField(
+                controller: _nameController,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.person),
                   labelText: 'Name',
@@ -26,7 +57,7 @@ class RegisterPage extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               TextField(
-                obscureText: true,
+                controller: _emailController,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.email),
                   labelText: 'E-Mail Adresse',
@@ -36,6 +67,7 @@ class RegisterPage extends StatelessWidget {
                 height: 20,
               ),
               TextField(
+                controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.lock),
@@ -82,8 +114,14 @@ class RegisterPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextButton(
-                  onPressed: () {
-                    //
+                  onPressed: () async {
+                    bool success = await _registerRequest(_nameController.text,
+                        _emailController.text, _passwordController.text);
+                    if (!success) {
+                      print("error");
+                    } else {
+                      print("success");
+                    }
                   },
                   child: Text(
                     'Registrieren',

@@ -1,6 +1,37 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables
 
-class LoginPage extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:volkshandwerker/Models/LoginResponse.dart';
+import 'package:volkshandwerker/Services/NetworkManager.dart';
+
+class LoginPage extends StatefulWidget {
+  LoginPage({Key? key}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  LoginResponse? _loginResponse;
+
+  Future<bool> _loginRequest(String email, String password) async {
+    NetworkManager networkManager =
+        NetworkManager('https://api.volkshandwerker.de/api');
+    LoginResponse? loginResponse =
+        await networkManager.loginRequest(email, password);
+    if (loginResponse == null) {
+      return false;
+    } else {
+      setState(() {
+        _loginResponse = loginResponse;
+      });
+      return true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -8,19 +39,24 @@ class LoginPage extends StatelessWidget {
         backgroundColor: const Color.fromRGBO(245, 183, 89, 1),
         title: Text('Anmelden'),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[
-              TextField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.mail),
-                  labelText: 'Benutzername / E-Mail',
-                ),
-              ),
               SizedBox(height: 20.0),
               TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.email),
+                  labelText: 'E-Mail Adresse',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextField(
+                controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.lock),
@@ -38,8 +74,14 @@ class LoginPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextButton(
-                  onPressed: () {
-                    //
+                  onPressed: () async {
+                    bool success = await _loginRequest(
+                        _emailController.text, _passwordController.text);
+                    if (!success) {
+                      print("error");
+                    } else {
+                      print("success");
+                    }
                   },
                   child: Text(
                     'EINLOGGEN',

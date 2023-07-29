@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:volkshandwerker/Models/Branches.dart';
 import 'package:volkshandwerker/Models/Categories.dart';
+import 'package:volkshandwerker/Models/LoginResponse.dart';
+import 'package:volkshandwerker/Models/RegisterResponse.dart';
 
 class NetworkManager {
   final String baseUrl;
@@ -36,6 +38,43 @@ class NetworkManager {
       return branches;
     } else {
       return [];
+    }
+}
+ 
+  Future<LoginResponse?> loginRequest(String email, String password) async {
+    var body = {'identifier': email, 'password': password};
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/local'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      dynamic jsonData = json.decode(response.body);
+      LoginResponse loginResponse = LoginResponse.fromJson(jsonData);
+      return loginResponse;
+    } else {
+      return null;
+    }
+  }
+
+  Future<RegisterResponse?> registerRequest(
+      String username, String email, String password) async {
+    var body = {"username": username, 'email': email, 'password': password};
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/local/register'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      dynamic jsonData = json.decode(response.body);
+      RegisterResponse registerResponse = RegisterResponse.fromJson(jsonData);
+      return registerResponse;
+    } else {
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      return null;
     }
   }
 }
