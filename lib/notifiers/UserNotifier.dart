@@ -18,4 +18,8 @@ class UserNotifier extends StateNotifier<LoginResponse?> {
   void logout() {
     state = null;
   }
+
+  bool isLoggedIn() {
+    return state?.jwt != null;
+  }
 }

@@ -24,8 +24,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
-    final isLoggedIn =
-        ref.read(userNotifierProvider.notifier).state?.jwt != null;
+    final isLoggedIn = ref.read(userNotifierProvider.notifier).isLoggedIn();
 
     print("IsLoggedIn? $isLoggedIn");
     _fetchCategories();
@@ -62,8 +61,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoggedIn =
-        ref.read(userNotifierProvider.notifier).state?.jwt != null;
+    final isLoggedIn = ref.read(userNotifierProvider.notifier).isLoggedIn();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(245, 183, 89, 1),
