@@ -4,6 +4,7 @@ import 'package:volkshandwerker/Models/Branches.dart';
 import 'package:volkshandwerker/Models/Categories.dart';
 import 'package:volkshandwerker/Models/LoginResponse.dart';
 import 'package:volkshandwerker/Models/RegisterResponse.dart';
+import 'package:volkshandwerker/Helpers/UserToken.dart';
 
 class NetworkManager {
   final String baseUrl;
@@ -53,6 +54,8 @@ class NetworkManager {
       dynamic jsonData = json.decode(response.body);
       LoginResponse loginResponse = LoginResponse.fromJson(jsonData);
       print("Login Success! Token: " + loginResponse.jwt);
+
+      await UserToken.setToken(loginResponse.jwt);
       return loginResponse;
     } else {
       print("Login Failed.");

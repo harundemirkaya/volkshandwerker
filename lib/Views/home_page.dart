@@ -6,6 +6,7 @@ import 'package:volkshandwerker/Views/login_page.dart';
 import 'package:volkshandwerker/Views/register_page.dart';
 import 'package:volkshandwerker/Models/Categories.dart';
 import 'package:volkshandwerker/Views/search_page.dart';
+import 'package:volkshandwerker/Helpers/UserToken.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,10 +16,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String selectedOption = "Seçenek 1";
   List<Categories> _categories = [];
+  String userToken = "";
+
   @override
   void initState() {
     super.initState();
     _fetchCategories();
+    UserToken.getToken().then((value) => {
+          setState(() {
+            userToken = value ?? "";
+          })
+        });
   }
 
   Future<void> _fetchCategories() async {
@@ -70,13 +78,22 @@ class _HomePageState extends State<HomePage> {
               }
             },
             itemBuilder: (BuildContext context) {
-              return ['Handwerksbetrieb inserieren', 'Anmelden']
-                  .map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
+              if (userToken == "") {
+                return ['Handwerksbetrieb inserieren', 'Anmelden']
+                    .map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              } else {
+                return ['Deneme Deneme', 'deneme'].map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              }
             },
             icon: Icon(Icons.more_vert),
           )

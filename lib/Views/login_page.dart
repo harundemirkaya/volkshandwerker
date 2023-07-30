@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:volkshandwerker/Models/LoginResponse.dart';
@@ -78,7 +78,21 @@ class _LoginPageState extends State<LoginPage> {
                     bool success = await _loginRequest(
                         _emailController.text, _passwordController.text);
                     if (!success) {
-                      print("error");
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: Text('FEHLER'),
+                          content: Text("Falscher Anmeldeversuch"),
+                          actions: [
+                            TextButton(
+                              child: Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
                     } else {
                       print("success");
                     }
