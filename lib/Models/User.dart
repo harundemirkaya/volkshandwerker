@@ -27,7 +27,7 @@ class User {
         id: json["id"],
         username: json["username"],
         email: json["email"],
-        provider: json["provider"],
+        provider: json["provider"] ?? "",
         confirmed: json["confirmed"],
         blocked: json["blocked"],
         createdAt: DateTime.parse(json["createdAt"]),

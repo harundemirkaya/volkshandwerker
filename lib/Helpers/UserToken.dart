@@ -10,4 +10,9 @@ class UserToken {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
   }
+
+  static Future<void> removeToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+  }
 }

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:volkshandwerker/Models/LoginResponse.dart';
 import 'package:volkshandwerker/Models/RegisterResponse.dart';
 import 'package:volkshandwerker/Services/NetworkManager.dart';
 import 'package:volkshandwerker/Views/login_page.dart';
@@ -11,6 +12,7 @@ import 'package:volkshandwerker/Models/Categories.dart';
 import 'package:volkshandwerker/Views/search_page.dart';
 import 'package:volkshandwerker/Helpers/UserToken.dart';
 
+import '../Models/User.dart';
 import '../notifiers/UserNotifier.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -29,11 +31,21 @@ class _HomePageState extends ConsumerState<HomePage> {
     final isLoggedIn = ref.read(userNotifierProvider.notifier).isLoggedIn();
     print("IsLoggedIn? $isLoggedIn");
     _fetchCategories();
+
     UserToken.getToken().then((value) => {
-          User? u = _userControl();
-          setState(() {
+          if (value != null)
+            _userControl(value).then((user) => {
+                  if (user != null)
+                    {
+                      ref
+                          .read(userNotifierProvider.notifier)
+                          .setUser(LoginResponse(user: user, jwt: value))
+                    }
+                })
+          /*  setState(() {
             userToken = value ?? "";
-          })
+            
+          }) */
         });
   }
 
@@ -58,10 +70,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     });
   }
 
-  Future<User?> _userControl() async {
+  Future<User?> _userControl(String token) async {
     NetworkManager networkManager =
         NetworkManager('https://api.volkshandwerker.de/api');
-    User? userResponse = await networkManager.userControl();
+    User? userResponse = await networkManager.userControl(token);
     return userResponse;
   }
 
@@ -97,6 +109,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                   MaterialPageRoute(builder: (context) => ProfilePage()),
                 );
               } else if (value == "Ausloggen") {
+                ref.read(userNotifierProvider.notifier).logout();
+                UserToken.removeToken();
+
                 ///
               }
             },
@@ -130,6 +145,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: Center(
                 child: Column(
                   children: [
+                    /* Text(_watch?.jwt ?? "No Token"), */
                     Text(
                       "Suchen Sie einen Handwerker?",
                       style: TextStyle(

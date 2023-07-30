@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:volkshandwerker/Models/Branches.dart';
 import 'package:volkshandwerker/Models/Categories.dart';
 import 'package:volkshandwerker/Models/LoginResponse.dart';
 import 'package:volkshandwerker/Models/RegisterResponse.dart';
 import 'package:volkshandwerker/Helpers/UserToken.dart';
+
+import '../Models/User.dart';
 
 class NetworkManager {
   final String baseUrl;
@@ -86,12 +89,13 @@ class NetworkManager {
     }
   }
 
-  Future<User?> userControl() async {
-    final response = await http.get(Uri.parse('$baseUrl/categories'));
+  Future<User?> userControl(String token) async {
+    final response = await http.get(Uri.parse('$baseUrl/users/me'),
+        headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
 
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);
-      User userModel = jsonData.map((json) => User.fromJson(json)).toList();
+      User userModel = User.fromJson(jsonData);
       return userModel;
     } else {
       return null;

@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'User.dart';
+
 RegisterResponse registerResponseFromJson(String str) =>
     RegisterResponse.fromJson(json.decode(str));
 
@@ -26,7 +28,7 @@ class RegisterResponse {
         "user": user.toJson(),
       };
 }
-
+/* 
 class User {
   int id;
   String username;
@@ -74,3 +76,4 @@ class User {
         "newsletter": newsletter,
       };
 }
+ */
