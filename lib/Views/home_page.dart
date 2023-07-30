@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                           });
                         },
                         decoration: InputDecoration(
-                          hintText: 'Ort',
+                          hintText: 'Alle Kategorien',
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(width: 0.5),
                             borderRadius: BorderRadius.circular(10),

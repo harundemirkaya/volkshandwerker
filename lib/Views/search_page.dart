@@ -29,16 +29,20 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   String? apiResponse;
   List<BranchModel> _branches = [];
+  bool _isLoading = true;
 
   Future<void> _fetchBranches() async {
-    print("Test ${widget.search} ${widget.categoryId}");
+    print("${widget.search} ${widget.categoryId}");
+
     NetworkManager networkManager =
         NetworkManager('https://api.volkshandwerker.de/api');
+
     List<BranchModel> branches =
         await networkManager.fetchBranches(widget.search, widget.categoryId);
 
     setState(() {
       _branches = branches;
+      _isLoading = false;
     });
   }
 
@@ -57,35 +61,39 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: const Color.fromRGBO(245, 183, 89, 1),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: _branches?.length == 0
-                  ? const Center(
-                      child: Text(
-                          "Es konnten keine Suchergebnisse gefunden werden."),
-                    )
-                  : ListView.builder(
-                      itemCount: _branches.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: _buildBranch(_branches[index]),
-                        );
-                      },
-                    ),
-            ),
-            const SizedBox(height: 20),
-            /* apiResponse != null
+        child: _isLoading
+            ? CircularProgressIndicator(
+                color: const Color.fromRGBO(245, 183, 89, 1),
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: _branches?.length == 0
+                        ? const Center(
+                            child: Text(
+                                "Es konnten keine Suchergebnisse gefunden werden."),
+                          )
+                        : ListView.builder(
+                            itemCount: _branches.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: _buildBranch(_branches[index]),
+                              );
+                            },
+                          ),
+                  ),
+                  const SizedBox(height: 20),
+                  /* apiResponse != null
                 ? Text(
                     'API Cevabı:\n$apiResponse',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16),
                   )
                 : CircularProgressIndicator(), */
-          ],
-        ),
+                ],
+              ),
       ),
     );
   }
