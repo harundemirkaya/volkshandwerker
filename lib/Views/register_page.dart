@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:volkshandwerker/Models/RegisterResponse.dart';
 import 'package:volkshandwerker/Services/NetworkManager.dart';
+import 'package:volkshandwerker/Views/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -115,12 +116,69 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 child: TextButton(
                   onPressed: () async {
-                    bool success = await _registerRequest(_nameController.text,
-                        _emailController.text, _passwordController.text);
-                    if (!success) {
-                      print("error");
+                    if (_checkBoxNotifier.value == true &&
+                        _checkBoxNotifierTwo.value == true) {
+                      bool success = await _registerRequest(
+                          _nameController.text,
+                          _emailController.text,
+                          _passwordController.text);
+                      if (!success) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: Text('FEHLER'),
+                            content: Text(
+                                "Bitte füllen Sie Ihre Angaben vollständig aus"),
+                            actions: [
+                              TextButton(
+                                child: Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: Text('Erfolgreich!'),
+                            content: Text(
+                                "Deine Registrierung ist abgeschlossen. Bitte loggen Sie sich ein."),
+                            actions: [
+                              TextButton(
+                                child: Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginPage()),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     } else {
-                      print("success");
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: Text('FEHLER'),
+                          content:
+                              Text('Bitte bestätigen Sie alle Berechtigungen.'),
+                          actions: [
+                            TextButton(
+                              child: Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
                     }
                   },
                   child: Text(

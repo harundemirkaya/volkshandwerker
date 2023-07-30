@@ -39,8 +39,8 @@ class NetworkManager {
     } else {
       return [];
     }
-}
- 
+  }
+
   Future<LoginResponse?> loginRequest(String email, String password) async {
     var body = {'identifier': email, 'password': password};
     final response = await http.post(
@@ -52,8 +52,12 @@ class NetworkManager {
     if (response.statusCode == 200) {
       dynamic jsonData = json.decode(response.body);
       LoginResponse loginResponse = LoginResponse.fromJson(jsonData);
+      print("Login Success! Token: " + loginResponse.jwt);
       return loginResponse;
     } else {
+      print("Login Failed.");
+      print('Status Code: ${response.statusCode}');
+      print("Response: ${response.body}");
       return null;
     }
   }
@@ -70,6 +74,7 @@ class NetworkManager {
     if (response.statusCode == 200) {
       dynamic jsonData = json.decode(response.body);
       RegisterResponse registerResponse = RegisterResponse.fromJson(jsonData);
+      print("Register Success!");
       return registerResponse;
     } else {
       print('Response status: ${response.statusCode}');
