@@ -98,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
-                          title: Text('Erfolgreich!'),
+                          title: Text('Erfolgreidech!'),
                           content: Text("Anmeldung erfolgreich."),
                           actions: [
                             TextButton(
