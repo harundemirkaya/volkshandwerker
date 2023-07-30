@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:volkshandwerker/Services/NetworkManager.dart';
 import 'package:volkshandwerker/Views/login_page.dart';
 import 'package:volkshandwerker/Views/register_page.dart';
@@ -8,12 +9,14 @@ import 'package:volkshandwerker/Models/Categories.dart';
 import 'package:volkshandwerker/Views/search_page.dart';
 import 'package:volkshandwerker/Helpers/UserToken.dart';
 
-class HomePage extends StatefulWidget {
+import '../notifiers/UserNotifier.dart';
+
+class HomePage extends ConsumerStatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   String selectedOption = "Seçenek 1";
   List<Categories> _categories = [];
   String userToken = "";
@@ -21,6 +24,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    final isLoggedIn =
+        ref.read(userNotifierProvider.notifier).state?.jwt != null;
+
+    print("IsLoggedIn? $isLoggedIn");
     _fetchCategories();
     UserToken.getToken().then((value) => {
           setState(() {

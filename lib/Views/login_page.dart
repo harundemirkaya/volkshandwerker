@@ -1,21 +1,36 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:volkshandwerker/Models/LoginResponse.dart';
 import 'package:volkshandwerker/Services/NetworkManager.dart';
 
-class LoginPage extends StatefulWidget {
+import '../notifiers/UserNotifier.dart';
+
+class LoginPage extends ConsumerStatefulWidget {
   LoginPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   LoginResponse? _loginResponse;
+
+  @override
+  void initState() {
+    super.initState();
+    final isLoggedIn =
+        ref.read(userNotifierProvider.notifier).state?.jwt != null;
+    print("IsLoggedIn? $isLoggedIn");
+    // pop until first page
+    if (isLoggedIn) {
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    }
+  }
 
   Future<bool> _loginRequest(String email, String password) async {
     NetworkManager networkManager =
@@ -25,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
     if (loginResponse == null) {
       return false;
     } else {
+      ref.read(userNotifierProvider.notifier).setUser(loginResponse);
       setState(() {
         _loginResponse = loginResponse;
       });
@@ -77,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () async {
                     bool success = await _loginRequest(
                         _emailController.text, _passwordController.text);
+
                     if (!success) {
                       showDialog(
                         context: context,
