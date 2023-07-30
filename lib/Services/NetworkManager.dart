@@ -32,7 +32,7 @@ class NetworkManager {
     final name0 = Uri.encodeComponent(name);
 
     final response = await http.get(Uri.parse(
-        '$baseUrl/branches?location=$name0&company.categories_in=$categoryId'));
+        '$baseUrl/branches?location=$name0${categoryId != 0 ? '&company.categories_in=$categoryId' : ''}'));
 
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
