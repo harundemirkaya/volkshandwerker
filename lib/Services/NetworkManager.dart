@@ -85,4 +85,16 @@ class NetworkManager {
       return null;
     }
   }
+
+  Future<User?> userControl() async {
+    final response = await http.get(Uri.parse('$baseUrl/categories'));
+
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      User userModel = jsonData.map((json) => User.fromJson(json)).toList();
+      return userModel;
+    } else {
+      return null;
+    }
+  }
 }

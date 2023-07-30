@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:volkshandwerker/Models/RegisterResponse.dart';
 import 'package:volkshandwerker/Services/NetworkManager.dart';
 import 'package:volkshandwerker/Views/login_page.dart';
+import 'package:volkshandwerker/Views/profile_page.dart';
 import 'package:volkshandwerker/Views/register_page.dart';
 import 'package:volkshandwerker/Models/Categories.dart';
 import 'package:volkshandwerker/Views/search_page.dart';
@@ -25,10 +27,10 @@ class _HomePageState extends ConsumerState<HomePage> {
   void initState() {
     super.initState();
     final isLoggedIn = ref.read(userNotifierProvider.notifier).isLoggedIn();
-
     print("IsLoggedIn? $isLoggedIn");
     _fetchCategories();
     UserToken.getToken().then((value) => {
+          User? u = _userControl();
           setState(() {
             userToken = value ?? "";
           })
@@ -56,13 +58,19 @@ class _HomePageState extends ConsumerState<HomePage> {
     });
   }
 
+  Future<User?> _userControl() async {
+    NetworkManager networkManager =
+        NetworkManager('https://api.volkshandwerker.de/api');
+    User? userResponse = await networkManager.userControl();
+    return userResponse;
+  }
+
   // Text Controller
   final _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final _watch = ref.watch(
-        userNotifierProvider); //ref.read(userNotifierProvider.notifier).isLoggedIn();
+    final _watch = ref.watch(userNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(245, 183, 89, 1),
@@ -78,11 +86,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                   context,
                   MaterialPageRoute(builder: (context) => RegisterPage()),
                 );
-              } else {
+              } else if (value == "Anmelden") {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
                 );
+              } else if (value == "Profil") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              } else if (value == "Ausloggen") {
+                ///
               }
             },
             itemBuilder: (BuildContext context) {
