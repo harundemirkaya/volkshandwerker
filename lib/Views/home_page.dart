@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 }).toList();
               } else {
-                return ['Deneme Deneme', 'deneme'].map((String choice) {
+                return ['Profil', 'Ausloggen'].map((String choice) {
                   return PopupMenuItem<String>(
                     value: choice,
                     child: Text(choice),

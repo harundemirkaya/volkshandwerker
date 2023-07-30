@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:volkshandwerker/Models/LoginResponse.dart';
 import 'package:volkshandwerker/Services/NetworkManager.dart';
+import 'package:volkshandwerker/Views/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -94,7 +95,22 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       );
                     } else {
-                      print("success");
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: Text('Erfolgreich!'),
+                          content: Text("Anmeldung erfolgreich."),
+                          actions: [
+                            TextButton(
+                              child: Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
                     }
                   },
                   child: Text(
