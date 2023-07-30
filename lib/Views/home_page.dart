@@ -61,7 +61,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoggedIn = ref.read(userNotifierProvider.notifier).isLoggedIn();
+    final _watch = ref.watch(
+        userNotifierProvider); //ref.read(userNotifierProvider.notifier).isLoggedIn();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(245, 183, 89, 1),
@@ -85,7 +86,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               }
             },
             itemBuilder: (BuildContext context) {
-              if (isLoggedIn == false) {
+              if (_watch?.jwt == null) {
                 return ['Handwerksbetrieb inserieren', 'Anmelden']
                     .map((String choice) {
                   return PopupMenuItem<String>(
