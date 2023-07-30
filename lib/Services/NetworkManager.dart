@@ -39,8 +39,8 @@ class NetworkManager {
     } else {
       return [];
     }
-}
- 
+  }
+
   Future<LoginResponse?> loginRequest(String email, String password) async {
     var body = {'identifier': email, 'password': password};
     final response = await http.post(
