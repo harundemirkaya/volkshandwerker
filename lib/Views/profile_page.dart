@@ -1,197 +1,306 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:volkshandwerker/Models/RegisterResponse.dart';
-import 'package:volkshandwerker/Services/NetworkManager.dart';
-import 'package:volkshandwerker/Views/login_page.dart';
+import 'package:volkshandwerker/notifiers/UserNotifier.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import '../Models/User.dart';
+import '../notifiers/UserNotifier.dart';
+import 'package:volkshandwerker/Helpers/UserToken.dart';
 
-class ProfilePage extends StatefulWidget {
-  ProfilePage({Key? key}) : super(key: key);
-
+class ProfilePage extends ConsumerStatefulWidget {
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  ConsumerState<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  final ValueNotifier<bool> _checkBoxNotifier = ValueNotifier(false);
-  final ValueNotifier<bool> _checkBoxNotifierTwo = ValueNotifier(false);
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
-  RegisterResponse? _registerResponse;
-
-  Future<bool> _registerRequest(
-      String username, String email, String password) async {
-    NetworkManager networkManager =
-        NetworkManager('https://api.volkshandwerker.de/api');
-    RegisterResponse? registerResponse =
-        await networkManager.registerRequest(username, email, password);
-    if (registerResponse == null) {
-      return false;
-    } else {
-      setState(() {
-        _registerResponse = registerResponse;
-      });
-      return true;
-    }
-  }
-
+class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    final _watch = ref.watch(userNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(245, 183, 89, 1),
-        title: Text('Handwerksbetrieb inserieren'),
+        title: Text(
+          "Profil",
+        ),
       ),
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
           child: Column(
-            children: <Widget>[
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.person),
-                  labelText: 'Name',
-                ),
-              ),
-              SizedBox(height: 20.0),
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.email),
-                  labelText: 'E-Mail Adresse',
+            children: [
+              Text(
+                "ANGABEN ZUM PROFIL",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(
                 height: 20,
               ),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.lock),
-                  labelText: 'Passwort',
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              ValueListenableBuilder<bool>(
-                valueListenable: _checkBoxNotifier,
-                builder: (context, value, child) {
-                  return CheckboxListTile(
-                    title: Text(
-                        'Ich habe die Allgemeinen Geschäftsbedingungen und Datenschutzrichtlinien gelesen und stimme diesen zu'),
-                    value: value,
-                    onChanged: (bool? newValue) {
-                      _checkBoxNotifier.value = newValue ?? false;
-                    },
-                  );
-                },
-              ),
-              ValueListenableBuilder<bool>(
-                valueListenable: _checkBoxNotifierTwo,
-                builder: (context, value, child) {
-                  return CheckboxListTile(
-                    title: Text(
-                        'Ich habe die Widerrufsbelehrung gelesen Widerrufsbelehrung'),
-                    value: value,
-                    onChanged: (bool? newValue) {
-                      _checkBoxNotifierTwo.value = newValue ?? false;
-                    },
-                  );
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(245, 183, 89, 1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextButton(
-                  onPressed: () async {
-                    if (_checkBoxNotifier.value == true &&
-                        _checkBoxNotifierTwo.value == true) {
-                      bool success = await _registerRequest(
-                          _nameController.text,
-                          _emailController.text,
-                          _passwordController.text);
-                      if (!success) {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: Text('FEHLER'),
-                            content: Text(
-                                "Bitte füllen Sie Ihre Angaben vollständig aus"),
-                            actions: [
-                              TextButton(
-                                child: Text('OK'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      } else {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: Text('Erfolgreich!'),
-                            content: Text(
-                                "Deine Registrierung ist abgeschlossen. Bitte loggen Sie sich ein."),
-                            actions: [
-                              TextButton(
-                                child: Text('OK'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => LoginPage()),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: Text('FEHLER'),
-                          content:
-                              Text('Bitte bestätigen Sie alle Berechtigungen.'),
-                          actions: [
-                            TextButton(
-                              child: Text('OK'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
-                  child: Text(
-                    'Registrieren',
+              Row(
+                children: [
+                  Text(
+                    "Anrede: ",
                     style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
+                  Text(
+                    (_watch?.user?.subscriber.gender == "female")
+                        ? "Frau"
+                        : (_watch?.user?.subscriber.gender == "male")
+                            ? "Herr"
+                            : "Divers",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Vorname: ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    _watch?.user?.subscriber.firstName ?? "",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Nachname: ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    _watch?.user?.subscriber.lastName ?? "",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Straßenname: ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    _watch?.user?.subscriber.street ?? "",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Hausnummer: ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    _watch?.user?.subscriber.houseNumber ?? "",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Stadt: ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    _watch?.user?.subscriber.city ?? "",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Postleitzahl: ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    _watch?.user?.subscriber.postalCode ?? "",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Land: ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    (_watch?.user?.subscriber.countryIso2 == "de")
+                        ? "DEUTSCHLAND"
+                        : (_watch?.user?.subscriber.countryIso2 == "ch")
+                            ? "Schweiz"
+                            : (_watch?.user?.subscriber.countryIso2 == "at")
+                                ? "Österreich"
+                                : "Nicht angegeben",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "VAT-Nummer: ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    _watch?.user?.subscriber.vatNumber ?? "",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "VAT-Nummer: ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    (_watch?.user?.subscriber.company.verificationStatus ==
+                            "verified")
+                        ? "verifiziert"
+                        : "Nicht verifiziert",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(245, 183, 89, 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: TextButton(
+                onPressed: () {
+                  // URL E YÖNLENDİRME
+                },
+                child: Text(
+                  'Profil Bearbeiten',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(245, 183, 89, 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: TextButton(
+                onPressed: () {
+                  // SHOW DIALOG AÇMA, DIALOG UN İÇİNDE MOBİL ABONELİKLER İÇİN AYARLAR EKRANINI TARİF ETME, WEB ABONELİKLER İÇİN WEB E YÖNLENDİREN OKEY BUTONU EKLEME
+                },
+                child: Text(
+                  'Kündigung des Abonnements',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

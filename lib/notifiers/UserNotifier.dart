@@ -15,6 +15,10 @@ class UserNotifier extends StateNotifier<LoginResponse?> {
     state = user;
   }
 
+  LoginResponse getUser() {
+    return state!;
+  }
+
   void logout() {
     state = null;
   }

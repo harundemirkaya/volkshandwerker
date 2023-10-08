@@ -125,7 +125,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   );
                 }).toList();
               } else {
-                return ['Profil', 'Ausloggen'].map((String choice) {
+                return ["Profil", 'Ausloggen'].map((String choice) {
                   return PopupMenuItem<String>(
                     value: choice,
                     child: Text(choice),
