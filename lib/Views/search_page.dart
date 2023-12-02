@@ -1,7 +1,6 @@
 // ignore_for_file: sort_child_properties_last
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:volkshandwerker/Models/Branches.dart';
 import 'package:volkshandwerker/Views/company_detail_page.dart';
 
@@ -20,7 +19,7 @@ class SearchPage extends StatefulWidget {
   final int categoryId;
 
   const SearchPage(
-      {required this.search, this.category, required this.categoryId});
+      {super.key, required this.search, this.category, required this.categoryId});
 
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -62,14 +61,14 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: Center(
         child: _isLoading
-            ? CircularProgressIndicator(
-                color: const Color.fromRGBO(245, 183, 89, 1),
+            ? const CircularProgressIndicator(
+                color: Color.fromRGBO(245, 183, 89, 1),
               )
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-                    child: _branches?.length == 0
+                    child: _branches.isEmpty
                         ? const Center(
                             child: Text(
                                 "Es konnten keine Suchergebnisse gefunden werden."),
@@ -146,8 +145,7 @@ class _SearchPageState extends State<SearchPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => CompanyDetailPage(
-                        url: 'https://volkshandwerker.de/branch/' +
-                            branch.id.toString()),
+                        url: 'https://volkshandwerker.de/branch/${branch.id}'),
                   ),
                 );
               },
@@ -156,7 +154,7 @@ class _SearchPageState extends State<SearchPage> {
                 style: TextStyle(color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Color.fromRGBO(255, 165, 0, 1),
+                backgroundColor: const Color.fromRGBO(255, 165, 0, 1),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 shape: RoundedRectangleBorder(
