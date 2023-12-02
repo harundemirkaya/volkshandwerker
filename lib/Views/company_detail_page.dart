@@ -7,7 +7,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class CompanyDetailPage extends StatefulWidget {
   final String url;
-  CompanyDetailPage({required this.url});
+  CompanyDetailPage({super.key, required this.url});
 
   @override
   _CompanyDetailPageState createState() => _CompanyDetailPageState();

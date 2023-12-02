@@ -13,9 +13,9 @@ class Logo {
   String? mime;
   double? size;
   String? url;
-  Null? previewUrl;
+  String? previewUrl;
   String? provider;
-  Null? providerMetadata;
+  String? providerMetadata;
   String? createdAt;
   String? updatedAt;
 
@@ -60,26 +60,26 @@ class Logo {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['alternativeText'] = this.alternativeText;
-    data['caption'] = this.caption;
-    data['width'] = this.width;
-    data['height'] = this.height;
-    if (this.formats != null) {
-      data['formats'] = this.formats!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['alternativeText'] = alternativeText;
+    data['caption'] = caption;
+    data['width'] = width;
+    data['height'] = height;
+    if (formats != null) {
+      data['formats'] = formats!.toJson();
     }
-    data['hash'] = this.hash;
-    data['ext'] = this.ext;
-    data['mime'] = this.mime;
-    data['size'] = this.size;
-    data['url'] = this.url;
-    data['previewUrl'] = this.previewUrl;
-    data['provider'] = this.provider;
-    data['provider_metadata'] = this.providerMetadata;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    data['hash'] = hash;
+    data['ext'] = ext;
+    data['mime'] = mime;
+    data['size'] = size;
+    data['url'] = url;
+    data['previewUrl'] = previewUrl;
+    data['provider'] = provider;
+    data['provider_metadata'] = providerMetadata;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }

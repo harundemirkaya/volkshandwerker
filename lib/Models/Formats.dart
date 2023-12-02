@@ -7,27 +7,26 @@ class Formats {
   Formats({this.large, this.small, this.medium, this.thumbnail});
 
   Formats.fromJson(Map<String, dynamic> json) {
-    large = json['large'] != null ? new Large.fromJson(json['large']) : null;
-    small = json['small'] != null ? new Large.fromJson(json['small']) : null;
-    medium = json['medium'] != null ? new Large.fromJson(json['medium']) : null;
-    thumbnail = json['thumbnail'] != null
-        ? new Large.fromJson(json['thumbnail'])
-        : null;
+    large = json['large'] != null ? Large.fromJson(json['large']) : null;
+    small = json['small'] != null ? Large.fromJson(json['small']) : null;
+    medium = json['medium'] != null ? Large.fromJson(json['medium']) : null;
+    thumbnail =
+        json['thumbnail'] != null ? Large.fromJson(json['thumbnail']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.large != null) {
-      data['large'] = this.large!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (large != null) {
+      data['large'] = large!.toJson();
     }
-    if (this.small != null) {
-      data['small'] = this.small!.toJson();
+    if (small != null) {
+      data['small'] = small!.toJson();
     }
-    if (this.medium != null) {
-      data['medium'] = this.medium!.toJson();
+    if (medium != null) {
+      data['medium'] = medium!.toJson();
     }
-    if (this.thumbnail != null) {
-      data['thumbnail'] = this.thumbnail!.toJson();
+    if (thumbnail != null) {
+      data['thumbnail'] = thumbnail!.toJson();
     }
     return data;
   }
@@ -39,7 +38,7 @@ class Large {
   String? hash;
   String? mime;
   String? name;
-  Null? path;
+  String? path;
   double? size;
   int? width;
   int? height;
@@ -68,16 +67,16 @@ class Large {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ext'] = this.ext;
-    data['url'] = this.url;
-    data['hash'] = this.hash;
-    data['mime'] = this.mime;
-    data['name'] = this.name;
-    data['path'] = this.path;
-    data['size'] = this.size;
-    data['width'] = this.width;
-    data['height'] = this.height;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['ext'] = ext;
+    data['url'] = url;
+    data['hash'] = hash;
+    data['mime'] = mime;
+    data['name'] = name;
+    data['path'] = path;
+    data['size'] = size;
+    data['width'] = width;
+    data['height'] = height;
     return data;
   }
 }

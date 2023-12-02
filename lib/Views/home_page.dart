@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:volkshandwerker/Models/LoginResponse.dart';
-import 'package:volkshandwerker/Models/RegisterResponse.dart';
 import 'package:volkshandwerker/Services/NetworkManager.dart';
 import 'package:volkshandwerker/Views/login_page.dart';
 import 'package:volkshandwerker/Views/profile_page.dart';
@@ -82,7 +81,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final _watch = ref.watch(userNotifierProvider);
+    final watch = ref.watch(userNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(245, 183, 89, 1),
@@ -116,7 +115,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               }
             },
             itemBuilder: (BuildContext context) {
-              if (_watch?.jwt == null) {
+              if (watch?.jwt == null) {
                 return ['Handwerksbetrieb inserieren', 'Anmelden']
                     .map((String choice) {
                   return PopupMenuItem<String>(

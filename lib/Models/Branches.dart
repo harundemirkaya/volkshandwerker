@@ -13,7 +13,7 @@ class BranchModel {
   String? houseNumber;
   double? latitude;
   double? longitude;
-  Null? country;
+  String? country;
   String? whatsappNumber;
   String? telegramUser;
   String? createdAt;
@@ -59,43 +59,43 @@ class BranchModel {
     if (json['WorkingTimes'] != null) {
       workingTimes = <WorkingTimes>[];
       json['WorkingTimes'].forEach((v) {
-        workingTimes!.add(new WorkingTimes.fromJson(v));
+        workingTimes!.add(WorkingTimes.fromJson(v));
       });
     }
     company =
-        json['company'] != null ? new Company.fromJson(json['company']) : null;
+        json['company'] != null ? Company.fromJson(json['company']) : null;
     if (json['images'] != null) {
       images = <Images>[];
       json['images'].forEach((v) {
-        images!.add(new Images.fromJson(v));
+        images!.add(Images.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['openingHours'] = this.openingHours;
-    data['postalCode'] = this.postalCode;
-    data['city'] = this.city;
-    data['street'] = this.street;
-    data['houseNumber'] = this.houseNumber;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
-    data['country'] = this.country;
-    data['whatsappNumber'] = this.whatsappNumber;
-    data['telegramUser'] = this.telegramUser;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    if (this.workingTimes != null) {
-      data['WorkingTimes'] = this.workingTimes!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['openingHours'] = openingHours;
+    data['postalCode'] = postalCode;
+    data['city'] = city;
+    data['street'] = street;
+    data['houseNumber'] = houseNumber;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
+    data['country'] = country;
+    data['whatsappNumber'] = whatsappNumber;
+    data['telegramUser'] = telegramUser;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    if (workingTimes != null) {
+      data['WorkingTimes'] = workingTimes!.map((v) => v.toJson()).toList();
     }
-    if (this.company != null) {
-      data['company'] = this.company!.toJson();
+    if (company != null) {
+      data['company'] = company!.toJson();
     }
-    if (this.images != null) {
-      data['images'] = this.images!.map((v) => v.toJson()).toList();
+    if (images != null) {
+      data['images'] = images!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -117,11 +117,11 @@ class WorkingTimes {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['day'] = this.day;
-    data['end'] = this.end;
-    data['start'] = this.start;
-    data['active'] = this.active;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['day'] = day;
+    data['end'] = end;
+    data['start'] = start;
+    data['active'] = active;
     return data;
   }
 }
@@ -143,13 +143,13 @@ class Company {
   String? subscriptionStatus;
   String? createdAt;
   String? updatedAt;
-  Null? youtube;
-  Null? xing;
-  Null? mainBranch;
+  String? youtube;
+  String? xing;
+  String? mainBranch;
   List<Branches>? branches;
   List<Categories>? categories;
   Logo? logo;
-  Null? verificationDocuments;
+  String? verificationDocuments;
   Subscriber? subscriber;
 
   Company(
@@ -201,7 +201,7 @@ class Company {
     if (json['branches'] != null) {
       branches = <Branches>[];
       json['branches'].forEach((v) {
-        branches!.add(new Branches.fromJson(v));
+        branches!.add(Branches.fromJson(v));
       });
     }
     if (json['categories'] != null) {
@@ -210,46 +210,46 @@ class Company {
         categories!.add(new Categories.fromJson(v));
       }); */
     }
-    logo = json['logo'] != null ? new Logo.fromJson(json['logo']) : null;
+    logo = json['logo'] != null ? Logo.fromJson(json['logo']) : null;
     //verificationDocuments = json['verificationDocuments'];
     subscriber = json['subscriber'] != null
-        ? new Subscriber.fromJson(json['subscriber'])
+        ? Subscriber.fromJson(json['subscriber'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['description'] = this.description;
-    data['phone'] = this.phone;
-    data['email'] = this.email;
-    data['mobileNumber'] = this.mobileNumber;
-    data['whatsappNumber'] = this.whatsappNumber;
-    data['website'] = this.website;
-    data['instagram'] = this.instagram;
-    data['facebook'] = this.facebook;
-    data['twitter'] = this.twitter;
-    data['linkedIn'] = this.linkedIn;
-    data['verificationStatus'] = this.verificationStatus;
-    data['subscriptionStatus'] = this.subscriptionStatus;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['youtube'] = this.youtube;
-    data['xing'] = this.xing;
-    data['mainBranch'] = this.mainBranch;
-    if (this.branches != null) {
-      data['branches'] = this.branches!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['description'] = description;
+    data['phone'] = phone;
+    data['email'] = email;
+    data['mobileNumber'] = mobileNumber;
+    data['whatsappNumber'] = whatsappNumber;
+    data['website'] = website;
+    data['instagram'] = instagram;
+    data['facebook'] = facebook;
+    data['twitter'] = twitter;
+    data['linkedIn'] = linkedIn;
+    data['verificationStatus'] = verificationStatus;
+    data['subscriptionStatus'] = subscriptionStatus;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['youtube'] = youtube;
+    data['xing'] = xing;
+    data['mainBranch'] = mainBranch;
+    if (branches != null) {
+      data['branches'] = branches!.map((v) => v.toJson()).toList();
     }
-    if (this.categories != null) {
-      data['categories'] = this.categories!.map((v) => v.toJson()).toList();
+    if (categories != null) {
+      data['categories'] = categories!.map((v) => v.toJson()).toList();
     }
-    if (this.logo != null) {
-      data['logo'] = this.logo!.toJson();
+    if (logo != null) {
+      data['logo'] = logo!.toJson();
     }
-    data['verificationDocuments'] = this.verificationDocuments;
-    if (this.subscriber != null) {
-      data['subscriber'] = this.subscriber!.toJson();
+    data['verificationDocuments'] = verificationDocuments;
+    if (subscriber != null) {
+      data['subscriber'] = subscriber!.toJson();
     }
     return data;
   }
@@ -265,7 +265,7 @@ class Branches {
   String? houseNumber;
   double? latitude;
   double? longitude;
-  Null? country;
+  String? country;
   String? whatsappNumber;
   String? telegramUser;
   String? createdAt;
@@ -307,29 +307,29 @@ class Branches {
     if (json['WorkingTimes'] != null) {
       workingTimes = <WorkingTimes>[];
       json['WorkingTimes'].forEach((v) {
-        workingTimes!.add(new WorkingTimes.fromJson(v));
+        workingTimes!.add(WorkingTimes.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['openingHours'] = this.openingHours;
-    data['postalCode'] = this.postalCode;
-    data['city'] = this.city;
-    data['street'] = this.street;
-    data['houseNumber'] = this.houseNumber;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
-    data['country'] = this.country;
-    data['whatsappNumber'] = this.whatsappNumber;
-    data['telegramUser'] = this.telegramUser;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    if (this.workingTimes != null) {
-      data['WorkingTimes'] = this.workingTimes!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['openingHours'] = openingHours;
+    data['postalCode'] = postalCode;
+    data['city'] = city;
+    data['street'] = street;
+    data['houseNumber'] = houseNumber;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
+    data['country'] = country;
+    data['whatsappNumber'] = whatsappNumber;
+    data['telegramUser'] = telegramUser;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    if (workingTimes != null) {
+      data['WorkingTimes'] = workingTimes!.map((v) => v.toJson()).toList();
     }
     return data;
   }

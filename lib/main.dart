@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:volkshandwerker/Views/home_page.dart';
-import 'package:volkshandwerker/Views/search_page.dart';
+import 'package:volkshandwerker/Views/login_page.dart';
+import 'package:volkshandwerker/Views/pack_page.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -13,16 +14,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Your App Name',
+      title: 'Volkshandwerker',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: PackPage(),
       /* routes: {
-        '/search': (context) => SearchPage(
-              arguments: null,
-            ),
+        '/login': (context) => LoginPage()
       }, */
     );
   }

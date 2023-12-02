@@ -12,7 +12,7 @@ class Subscriber {
   String? language;
   String? telephone;
   String? vatNumber;
-  Null? bIC;
+  String? bIC;
   String? nameZahlungsempfaenger;
   String? createdAt;
   String? updatedAt;
@@ -60,25 +60,25 @@ class Subscriber {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['firstName'] = this.firstName;
-    data['middleName'] = this.middleName;
-    data['lastName'] = this.lastName;
-    data['postalCode'] = this.postalCode;
-    data['houseNumber'] = this.houseNumber;
-    data['houseNumberAdd'] = this.houseNumberAdd;
-    data['street'] = this.street;
-    data['city'] = this.city;
-    data['countryIso2'] = this.countryIso2;
-    data['language'] = this.language;
-    data['telephone'] = this.telephone;
-    data['vatNumber'] = this.vatNumber;
-    data['BIC'] = this.bIC;
-    data['nameZahlungsempfaenger'] = this.nameZahlungsempfaenger;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['gender'] = this.gender;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['firstName'] = firstName;
+    data['middleName'] = middleName;
+    data['lastName'] = lastName;
+    data['postalCode'] = postalCode;
+    data['houseNumber'] = houseNumber;
+    data['houseNumberAdd'] = houseNumberAdd;
+    data['street'] = street;
+    data['city'] = city;
+    data['countryIso2'] = countryIso2;
+    data['language'] = language;
+    data['telephone'] = telephone;
+    data['vatNumber'] = vatNumber;
+    data['BIC'] = bIC;
+    data['nameZahlungsempfaenger'] = nameZahlungsempfaenger;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['gender'] = gender;
     return data;
   }
 }

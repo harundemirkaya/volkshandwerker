@@ -6,6 +6,7 @@ import 'package:volkshandwerker/Models/Categories.dart';
 import 'package:volkshandwerker/Models/LoginResponse.dart';
 import 'package:volkshandwerker/Models/RegisterResponse.dart';
 import 'package:volkshandwerker/Helpers/UserToken.dart';
+import 'package:volkshandwerker/Models/SubscriberResponse.dart';
 
 import '../Models/User.dart';
 
@@ -56,7 +57,7 @@ class NetworkManager {
     if (response.statusCode == 200) {
       dynamic jsonData = json.decode(response.body);
       LoginResponse loginResponse = LoginResponse.fromJson(jsonData);
-      print("Login Success! Token: " + loginResponse.jwt);
+      print("Login Success! Token: ${loginResponse.jwt}");
 
       await UserToken.setToken(loginResponse.jwt);
       return loginResponse;
@@ -99,6 +100,35 @@ class NetworkManager {
       return userModel;
     } else {
       return null;
+    }
+  }
+
+  Future<SubscriberResponse?> updateSubscriber(
+      SubscriberUpdate data, dynamic userId) async {
+    final url = Uri.parse('$baseUrl/subscribers/$userId');
+    var token = await UserToken.getToken();
+
+    try {
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${token}'
+        },
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonData = json.decode(response.body);
+        SubscriberResponse subscriberResponse =
+            SubscriberResponse.fromJson(jsonData);
+        return subscriberResponse;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error occurred while sending data to the API: $e');
+      // Handle the exception if needed
     }
   }
 }
