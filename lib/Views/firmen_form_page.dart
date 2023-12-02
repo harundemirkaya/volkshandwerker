@@ -62,22 +62,20 @@ class _MyFormState extends ConsumerState<FirmenFormPage> {
                     {
                       // set user data to the form
                       companyNameController.text =
-                          user.subscriber['company']?['name'] ?? '',
+                          user.subscriber?.company?.name ?? '',
                       steuerIdController.text =
-                          user.subscriber['vatNumber'] ?? '',
+                          user.subscriber?.vatNumber ?? '',
                       /* anredeController.text =
                           user.subscriber['gender'] ?? 'female', */
-                      vornameController.text =
-                          user.subscriber['firstName'] ?? '',
-                      nachnameController.text =
-                          user.subscriber['lastName'] ?? '',
-                      strasseController.text = user.subscriber['street'] ?? '',
+                      vornameController.text = user.subscriber?.firstName ?? '',
+                      nachnameController.text = user.subscriber?.lastName ?? '',
+                      strasseController.text = user.subscriber?.street ?? '',
                       hausnummerController.text =
-                          user.subscriber['houseNumber'] ?? '',
-                      plzController.text = user.subscriber['postalCode'] ?? '',
-                      stadtController.text = user.subscriber['city'] ?? '',
+                          user.subscriber?.houseNumber ?? '',
+                      plzController.text = user.subscriber?.postalCode ?? '',
+                      stadtController.text = user.subscriber?.city ?? '',
                       telefonnummerController.text =
-                          user.subscriber['telephone'] ?? '',
+                          user.subscriber?.telephone ?? '',
                       //landController.text = user.subscriber['country'] ?? 'de',
                     }
                 })

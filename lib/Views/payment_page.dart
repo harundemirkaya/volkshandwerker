@@ -77,14 +77,13 @@ class _MyFormState extends ConsumerState<PaymentPage> {
                           decorationThickness: 1,
                         )),
                     const SizedBox(height: 5),
+                    Text('${watch?.user?.subscriber?.nameZahlungsempfaenger}'),
                     Text(
-                        '${watch?.user?.subscriber['nameZahlungsempfaenger']}'),
+                        '${watch?.user?.subscriber?.firstName} ${watch?.user?.subscriber?.lastName}'),
                     Text(
-                        '${watch?.user?.subscriber['firstName']} ${watch?.user?.subscriber['lastName']}'),
+                        '${watch?.user?.subscriber?.street} ${watch?.user?.subscriber?.houseNumber}'),
                     Text(
-                        '${watch?.user?.subscriber['street']} ${watch?.user?.subscriber['houseNumber']}'),
-                    Text(
-                        '${watch?.user?.subscriber['postalCode']} ${watch?.user?.subscriber['city']}'),
+                        '${watch?.user?.subscriber?.postalCode} ${watch?.user?.subscriber?.city}'),
                     const SizedBox(height: 10),
                     const Text('E-Mail',
                         style: TextStyle(

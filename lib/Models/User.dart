@@ -58,26 +58,26 @@ class User {
 
 class Subscriber {
   int id;
-  String firstName;
-  String middleName;
-  String lastName;
-  String postalCode;
-  String houseNumber;
-  String houseNumberAdd;
-  String street;
-  String city;
-  String countryIso2;
-  String language;
-  String telephone;
-  String vatNumber;
-  dynamic iban;
-  dynamic bic;
-  String nameZahlungsempfaenger;
+  String? firstName;
+  String? middleName;
+  String? lastName;
+  String? postalCode;
+  String? houseNumber;
+  String? houseNumberAdd;
+  String? street;
+  String? city;
+  String? countryIso2;
+  String? language;
+  String? telephone;
+  String? vatNumber;
+  dynamic? iban;
+  dynamic? bic;
+  String? nameZahlungsempfaenger;
   DateTime createdAt;
   DateTime updatedAt;
-  String gender;
-  Company company;
-  Pack pack;
+  String? gender;
+  Company? company;
+  Pack? pack;
 
   Subscriber({
     required this.id,
@@ -123,8 +123,9 @@ class Subscriber {
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         gender: json["gender"],
-        company: Company.fromJson(json["company"]),
-        pack: Pack.fromJson(json["pack"]),
+        company:
+            json["company"] != null ? Company.fromJson(json["company"]) : null,
+        pack: json['pack'] != null ? Pack.fromJson(json["pack"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -144,34 +145,34 @@ class Subscriber {
         "IBAN": iban,
         "BIC": bic,
         "nameZahlungsempfaenger": nameZahlungsempfaenger,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
         "gender": gender,
-        "company": company.toJson(),
-        "pack": pack.toJson(),
+        "company": company?.toJson(),
+        "pack": pack?.toJson(),
       };
 }
 
 class Company {
-  int id;
-  String name;
-  String description;
-  String phone;
-  String email;
-  String mobileNumber;
-  String whatsappNumber;
-  String website;
-  String instagram;
-  String facebook;
-  String twitter;
-  String linkedIn;
-  String verificationStatus;
-  String subscriptionStatus;
-  DateTime createdAt;
-  DateTime updatedAt;
-  dynamic youtube;
-  dynamic xing;
-  List<dynamic> branches;
+  int? id;
+  String? name;
+  String? description;
+  String? phone;
+  String? email;
+  String? mobileNumber;
+  String? whatsappNumber;
+  String? website;
+  String? instagram;
+  String? facebook;
+  String? twitter;
+  String? linkedIn;
+  String? verificationStatus;
+  String? subscriptionStatus;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  dynamic? youtube;
+  dynamic? xing;
+  List<dynamic>? branches;
 
   Company({
     required this.id,
@@ -214,7 +215,10 @@ class Company {
         updatedAt: DateTime.parse(json["updatedAt"]),
         youtube: json["youtube"],
         xing: json["xing"],
-        branches: List<dynamic>.from(json["branches"].map((x) => x)),
+        // branches might be null
+        branches: json["branches"] == null
+            ? []
+            : List<dynamic>.from(json["branches"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
@@ -232,11 +236,11 @@ class Company {
         "linkedIn": linkedIn,
         "verificationStatus": verificationStatus,
         "subscriptionStatus": subscriptionStatus,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
         "youtube": youtube,
         "xing": xing,
-        "branches": List<dynamic>.from(branches.map((x) => x)),
+        "branches": List<dynamic>.from(branches?.map((x) => x) ?? [])
       };
 }
 

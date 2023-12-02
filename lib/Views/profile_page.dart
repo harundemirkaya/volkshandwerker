@@ -238,7 +238,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     ),
                   ),
                   Text(
-                    (_watch?.user?.subscriber.company.verificationStatus ==
+                    (_watch?.user?.subscriber?.company?.verificationStatus ==
                             "verified")
                         ? "verifiziert"
                         : "Nicht verifiziert",

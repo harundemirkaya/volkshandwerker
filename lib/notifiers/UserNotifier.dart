@@ -1,9 +1,12 @@
 // Write user notifier using Riverpod for login response
 
+import 'dart:convert';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:volkshandwerker/Models/LoginResponse.dart';
-import 'package:volkshandwerker/Models/Subscriber.dart';
 import 'package:volkshandwerker/Models/SubscriberResponse.dart';
+
+import '../Models/User.dart';
 
 final userNotifierProvider =
     StateNotifierProvider<UserNotifier, LoginResponse?>((ref) {
@@ -34,10 +37,11 @@ class UserNotifier extends StateNotifier<LoginResponse?> {
   }
 
   Subscriber? get subscriber {
-    return Subscriber.fromJson(state?.user?.subscriber);
+    return state?.user?.subscriber;
+    //return Subscriber.fromJson(state?.user?.subscriber);
   }
 
-  void updateSubscriber(SubscriberResponse subscriber) {
-    state?.user?.subscriber = subscriber.toJson();
+  void updateSubscriber(Subscriber subscriber) {
+    state?.user?.subscriber = subscriber;
   }
 }

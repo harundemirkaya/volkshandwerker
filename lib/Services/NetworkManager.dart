@@ -103,7 +103,7 @@ class NetworkManager {
     }
   }
 
-  Future<SubscriberResponse?> updateSubscriber(
+  Future<Subscriber?> updateSubscriber(
       SubscriberUpdate data, dynamic userId) async {
     final url = Uri.parse('$baseUrl/subscribers/$userId');
     var token = await UserToken.getToken();
@@ -119,9 +119,11 @@ class NetworkManager {
       );
 
       if (response.statusCode == 200) {
-        var jsonData = json.decode(response.body);
-        SubscriberResponse subscriberResponse =
-            SubscriberResponse.fromJson(jsonData);
+        final Map<String, dynamic> jsonData = json.decode(response.body);
+        print('23');
+        print(jsonData);
+        Subscriber subscriberResponse = Subscriber.fromJson(jsonData);
+        print(subscriberResponse);
         return subscriberResponse;
       } else {
         return null;

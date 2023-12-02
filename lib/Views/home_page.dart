@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:volkshandwerker/Models/LoginResponse.dart';
 import 'package:volkshandwerker/Services/NetworkManager.dart';
 import 'package:volkshandwerker/Views/login_page.dart';
+import 'package:volkshandwerker/Views/pack_page.dart';
 import 'package:volkshandwerker/Views/profile_page.dart';
 import 'package:volkshandwerker/Views/register_page.dart';
 import 'package:volkshandwerker/Models/Categories.dart';
@@ -79,6 +80,14 @@ class _HomePageState extends ConsumerState<HomePage> {
   // Text Controller
   final _textController = TextEditingController();
 
+  var logoutMenu = [
+    'Handwerksbetrieb inserieren',
+    'Paket auswählen',
+    'Anmelden'
+  ];
+
+  var loginMenu = ['Profil', 'Paket auswählen', 'Ausloggen'];
+
   @override
   Widget build(BuildContext context) {
     final watch = ref.watch(userNotifierProvider);
@@ -110,21 +119,28 @@ class _HomePageState extends ConsumerState<HomePage> {
               } else if (value == "Ausloggen") {
                 ref.read(userNotifierProvider.notifier).logout();
                 UserToken.removeToken();
-
-                ///
+              } else if (value == "Paket auswählen") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PackPage()),
+                );
               }
             },
             itemBuilder: (BuildContext context) {
               if (watch?.jwt == null) {
-                return ['Handwerksbetrieb inserieren', 'Anmelden']
-                    .map((String choice) {
+                return logoutMenu.map((String choice) {
                   return PopupMenuItem<String>(
                     value: choice,
                     child: Text(choice),
                   );
                 }).toList();
               } else {
-                return ["Profil", 'Ausloggen'].map((String choice) {
+                return (watch?.user?.subscriber?.company?.subscriptionStatus ==
+                            'active'
+                        ? loginMenu
+                            .where((element) => element != "Paket auswählen")
+                        : loginMenu)
+                    .map((String choice) {
                   return PopupMenuItem<String>(
                     value: choice,
                     child: Text(choice),
