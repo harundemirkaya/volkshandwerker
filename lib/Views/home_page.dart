@@ -80,11 +80,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   // Text Controller
   final _textController = TextEditingController();
 
-  var logoutMenu = [
-    'Handwerksbetrieb inserieren',
-    'Paket auswählen',
-    'Anmelden'
-  ];
+  var logoutMenu = ['Handwerksbetrieb inserieren', 'Anmelden'];
 
   var loginMenu = ['Profil', 'Paket auswählen', 'Ausloggen'];
 
