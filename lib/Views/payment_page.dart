@@ -1,6 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:volkshandwerker/Models/AppleModel.dart';
+import 'package:volkshandwerker/Models/ApplePay.dart';
+import 'package:volkshandwerker/Models/ApplePayPrice.dart';
+import 'package:volkshandwerker/Services/NetworkManager.dart';
 import 'package:volkshandwerker/notifiers/UserNotifier.dart';
 import 'package:pay/pay.dart';
 import 'package:volkshandwerker/payment/payment_configurations.dart';
@@ -21,14 +26,19 @@ class _MyFormState extends ConsumerState<PaymentPage> {
 
   String os = Platform.operatingSystem;
 
+  final Future<AppleModel> _applePayConfigFuture =
+      NetworkManager('https://api.volkshandwerker.de/api').applePayConfig();
+
+  //.applePayConfiguration();
+
   var applePayButton = ApplePayButton(
     paymentConfiguration: PaymentConfiguration.fromJsonString(defaultApplePay),
     paymentItems: const [
       PaymentItem(
-        label: 'Pack 1',
-        amount: '7.99',
-        status: PaymentItemStatus.final_price,
-      )
+          label: 'Standard Paket',
+          amount: '7.99',
+          status: PaymentItemStatus.final_price,
+          type: PaymentItemType.total)
     ],
     style: ApplePayButtonStyle.black,
     type: ApplePayButtonType.buy,
@@ -39,6 +49,46 @@ class _MyFormState extends ConsumerState<PaymentPage> {
       child: CircularProgressIndicator(),
     ),
   );
+
+  FutureBuilder _applePayButtonBuilder() {
+    return FutureBuilder<AppleModel>(
+      future: _applePayConfigFuture,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var item = snapshot.data!.item!;
+          return ApplePayButton(
+            paymentConfiguration:
+                PaymentConfiguration.fromJsonString(snapshot.data!.config!),
+            paymentItems: [
+              PaymentItem(
+                  label: item.label!,
+                  amount: item.amount!,
+                  status: item.status == 'final_price'
+                      ? PaymentItemStatus.final_price
+                      : item.status == 'pending'
+                          ? PaymentItemStatus.pending
+                          : PaymentItemStatus.unknown,
+                  type: PaymentItemType.total)
+            ],
+            style: ApplePayButtonStyle.black,
+            type: ApplePayButtonType.buy,
+            width: double.infinity,
+            height: 50,
+            onPaymentResult: (result) => onApplePayResult(result),
+            loadingIndicator: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +105,7 @@ class _MyFormState extends ConsumerState<PaymentPage> {
           child: AbsorbPointer(
             absorbing: isButtonDisabled,
             child: Platform.isIOS
-                ? applePayButton
+                ? _applePayButtonBuilder()
                 : Text('Payment is not supported on $os'),
           ),
         ),
@@ -211,8 +261,27 @@ class _MyFormState extends ConsumerState<PaymentPage> {
     );
   }
 
-  void onApplePayResult(paymentResult) {
+  Future<void> onApplePayResult(paymentResult) async {
     // Send the resulting Apple Pay token to your server / PSP
+
+    print(jsonEncode(paymentResult));
+    var jsonData = jsonEncode(paymentResult);
+    var data = await NetworkManager('https://api.volkshandwerker.de/api')
+        .makeApplePayPayment(jsonData);
+
+    if (data == null) {
+      return showFlashError(context, 'etwas ist schief gelaufen');
+    }
+
+    if (data?['success'] == true) {
+      showFlashError(context, data?['message'] ?? 'Payment successful');
+    } else {
+      showFlashError(context, data?['message'] ?? 'Payment failed');
+    }
+
+    if (data?['redirect'] == true) {
+      Navigator.pushNamed(context, '/home');
+    }
   }
 
   void onGooglePayResult(paymentResult) {

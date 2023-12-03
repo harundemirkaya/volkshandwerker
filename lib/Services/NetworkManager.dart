@@ -1,9 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:volkshandwerker/Models/AppleModel.dart';
+import 'package:volkshandwerker/Models/ApplePay.dart';
+import 'package:volkshandwerker/Models/ApplePayPrice.dart';
 import 'package:volkshandwerker/Models/Branches.dart';
 import 'package:volkshandwerker/Models/Categories.dart';
 import 'package:volkshandwerker/Models/LoginResponse.dart';
+import 'package:volkshandwerker/Models/Payment.dart';
 import 'package:volkshandwerker/Models/RegisterResponse.dart';
 import 'package:volkshandwerker/Helpers/UserToken.dart';
 import 'package:volkshandwerker/Models/SubscriberResponse.dart';
@@ -120,10 +124,7 @@ class NetworkManager {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = json.decode(response.body);
-        print('23');
-        print(jsonData);
         Subscriber subscriberResponse = Subscriber.fromJson(jsonData);
-        print(subscriberResponse);
         return subscriberResponse;
       } else {
         return null;
@@ -132,5 +133,83 @@ class NetworkManager {
       print('Error occurred while sending data to the API: $e');
       // Handle the exception if needed
     }
+  }
+
+  Future<AppPaymentResponse> paymentRequest(dynamic data) {
+    final url = Uri.parse('https://pay.volkshandwerker.de:2096/pay/subscribe');
+    return http.post(url, body: data).then((http.Response response) {
+      final int statusCode = response.statusCode;
+      if (statusCode != 200) {
+        print('Error while fetching data');
+        return AppPaymentResponse.fromJson(json.decode(response.body));
+      }
+      return AppPaymentResponse.fromJson(json.decode(response.body));
+    });
+  }
+
+  Future<ApplePayConfiguration> applePayConfiguration() async {
+    final response = await http
+        .get(Uri.parse('https://pay.volkshandwerker.de:2096/pay/appleinfo'));
+
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      ApplePayConfiguration applePayConfiguration =
+          ApplePayConfiguration.fromJson(jsonData);
+      return applePayConfiguration;
+    } else {
+      throw Exception('Failed to load payment info');
+    }
+  }
+
+  Future<String> applePayConfigurationString() async {
+    final response = await http
+        .get(Uri.parse('https://pay.volkshandwerker.de:2096/pay/appleinfo'));
+
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      ApplePayConfiguration applePayConfiguration =
+          ApplePayConfiguration.fromJson(jsonData);
+      return jsonEncode(applePayConfiguration);
+    } else {
+      throw Exception('Failed to load payment info');
+    }
+  }
+
+  Future<ApplePayPrice> applePayPrice() async {
+    final response = await http
+        .get(Uri.parse('https://pay.volkshandwerker.de:2096/pay/appleprice'));
+
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      ApplePayPrice applePayPrice = ApplePayPrice.fromJson(jsonData);
+      return applePayPrice;
+    } else {
+      throw Exception('Failed to load payment info');
+    }
+  }
+
+  Future<AppleModel> applePayConfig() async {
+    final response = await http
+        .get(Uri.parse('https://pay.volkshandwerker.de:2096/pay/appleinfo'));
+
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      AppleModel applePayConfig = AppleModel.fromJson(jsonData);
+      return applePayConfig;
+    } else {
+      throw Exception('Failed to load payment info');
+    }
+  }
+
+  Future<dynamic> makeApplePayPayment(dynamic data) async {
+    final url = Uri.parse('https://pay.volkshandwerker.de:2096/pay/applepay');
+    return http.post(url, body: data).then((http.Response response) {
+      final int statusCode = response.statusCode;
+      if (statusCode != 200) {
+        print('Error while fetching data');
+        return json.decode(response.body);
+      }
+      return json.decode(response.body);
+    });
   }
 }
